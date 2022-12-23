@@ -44,6 +44,18 @@ def getLineFromContour(contour , mask):
     if length != 0:
         divergence = (l*m)/( length * length)
         return a, b, angle , intensity , length , divergence
+def houghTransform(contour, mask):
+    edges = cv2.Canny(contour, 50, 150, apertureSize=3)
+    lines = cv2.(edges, 2, np.pi/180, threshold=70, minLineLength=8, maxLineGap=50)
+    result = []
+    for pts in lines:
+        a, b = (pts[0], pts[1]), (pts[2], pts[3])
+        angle = np.arctan((pts[3]-pts[1])/(pts[2]-pts[0]))
+        length = (pts[2]-pts[0]) * np.cos(angle)
+        angle *= 180/np.pi
+        result.extend([a,b,angle,length])
+    if length != 0:
+        return a, b, angle , length #since no area of rect intensity and divergence cant be determined
 def detectTracks (img):
     mask = fgbg . apply ( img)
     mask = cv2. blur (mask , (15 , 15))
