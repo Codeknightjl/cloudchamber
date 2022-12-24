@@ -17,7 +17,7 @@ Note:
 I would greatly appreciate any form of rectifications and suggestions to my rendering of the code.  
 \
 \
-References:
+Reference:
 1. Automatic Particle Detection in Clound Chambers by Zachary Sussman
    https://zacharysussman.com/pdf/cloud-chamber.pdf
 2. Disjoint set union (union find) 
