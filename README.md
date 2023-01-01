@@ -1,5 +1,5 @@
 # Cloudchamber
-Automatic particle track detection in a cloud chamber with on OpenCV-python
+Automatic particle track detection in a cloud chamber with OpenCV-python
 
 This project is based on the paper "Automatic Particle Detection in Clound Chambers" by Zachary Sussman. The code detects and evaluates subatomic particle tracks in videos of functioning cloud chamber.
 
