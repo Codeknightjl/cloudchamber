@@ -12,7 +12,7 @@ A few improvements have been made to the original code in the paper:
 3. An alternate function that uses [canny edge detection](https://en.wikipedia.org/wiki/Canny_edge_detector) and probabilistic [Hough Transform](https://en.wikipedia.org/wiki/Hough_transform#:~:text=The%20Hough%20transform%20is%20a,shapes%20by%20a%20voting%20procedure.) on each contour to obtain the lines is added. However, this method will not be able to give the intensity and divergence of the track.  
 
 ### Notes
-- This modified version of the code has not been tested on actual data due to lack of computational resources. 
+- This modified version of the code has not been tested thoroughly on actual data due to lack of computational resources. 
 - There might be discrepancies in delivery of angles among functions due to inconsistencies in return range of OpenCV minAreaRect function's angle and NumPy arctan function which has not been thoroughly tested.  
 
 I would greatly appreciate any form of rectifications and suggestions to my rendering of the code.  
