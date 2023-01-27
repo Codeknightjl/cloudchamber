@@ -9,6 +9,7 @@ import time as t
 start = t.time ()
 cap = cv2. VideoCapture ("video_file.mp4")
 cap. open ("video_file.mp4")
+direction = (0,0)
 def grayscale(img):
     img = cv2.cvtColor (img , cv2.COLOR_BGR2GRAY)
     img = cv2.cvtColor (img , cv2.COLOR_GRAY2BGR)
@@ -57,7 +58,7 @@ def houghTransform(contour, mask):
     if length != 0:
         return a, b, angle , length #since no area of rect intensity and divergence cant be determined
 def detectTracks (img):
-    mask = fgbg . apply ( img)
+    mask = fgbg . apply (img)
     mask = cv2. blur (mask , (15 , 15))
     ret , mask = cv2 . threshold (mask , 64, 255 , cv2. THRESH_BINARY)
     mask = cv2. dilate (mask , (4 ,4))
@@ -72,16 +73,23 @@ def linesSimilar (la , lb):
     anglediff = abs(angleA - angleB)
     if anglediff > 30:
         return False
-    a1 = np. array (la [0])
-    a2 = np. array (la [1])
-    b1 = np. array (lb [0])
-    b2 = np. array (lb [1])
-    dist1 = np. linalg . norm (a1 -b1) > 50
-    dist2 = np. linalg . norm (a2 -b2) > 50
-    dist3 = np. linalg . norm (a1 -b2) > 50
-    dist4 = np. linalg . norm (a2 -b1) > 50
+    a1 = np. array (la[0])
+    a2 = np. array (la[1])
+    b1 = np. array (lb[0])
+    b2 = np. array (lb[1])
+    dist1 = np.linalg.norm (a1-b1) > 50
+    dist2 = np.linalg.norm (a2-b2) > 50
+    dist3 = np.linalg.norm (a1-b2) > 50
+    dist4 = np.linalg.norm (a2-b1) > 50
     if sum ((dist1 , dist2 , dist3 , dist4)) < 2:
          return False
+    if np.linalg.norm(a1-b1) > np.linalg.norm(a1-b2):
+        b1, b2 = b2, b1
+    if np.linalg.norm(a1-b1) > np.linalg.norm(a2-b2):
+        direction = a1-a2
+    else:
+        direction = a2-a1
+    # The line from the earlier frame is used to determine the direction as the line distorts with time due to drifting of the vapour particles
     return True
 def analyzeEvents (eventDict):
     rows = []
@@ -117,38 +125,38 @@ events = {}
 frame = None
 gray = None
 mask = None
-while (cap. isOpened ()):
+while(cap. isOpened ()):
     try :
-        ret , frame = cap. read ()
+        ret , frame = cap.read()
         if not ret :
             break
-        gray = grayscale ( frame )
-        mask , lines = detectTracks ( gray )
+        gray = grayscale (frame)
+        mask , lines = detectTracks(gray)
         currentevents = []
         if time != 0:
             for l in lines :
                 found = False
                 for l2 in eventlist [time -1]:
                     if linesSimilar (l, l2 [1]):
-                        currentevents += [( l2 [0] , l)]
-                        events [l2 [0]] += [( time , l)]
+                        currentevents += [(l2[0], l, direction)]
+                        events[l2[0]] += [(time, l, direction)]
                         found = True
                         break
                 if not found :
-                    currentevents += [( nextid , l)]
-                    events [ nextid ] = [( time ,l)]
+                    currentevents += [(nextid , l)]
+                    events[nextid] = [(time, l)]
                     nextid += 1
         else :
             for l in lines :
-            currentevents += [( nextid , l)]
-            events [ nextid ] = [( time , l)]
+            currentevents += [(nextid, l)]
+            events[nextid] = [(time , l)]
             nextid += 1
-        eventlist [ time ] = currentevents
+        eventlist [time] = currentevents
     except Exception as e:
-        print(time , e)
+        print(time, e)
     finally :
         time += 1
-events = {k: v for k,v in events . items () if len(v) > 4}
+events = {k: v for k,v in events . items () if len(v) > 4} #filter out spurious lines, all lines remaining will have a direction
 enterEvents ( events )
 cap. release ()
 cv2. destroyAllWindows ()
