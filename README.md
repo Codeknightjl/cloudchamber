@@ -3,7 +3,7 @@
 Automatic particle track detection ([DAQ](https://en.wikipedia.org/wiki/Data_acquisition)) in a cloud chamber with OpenCV-python
 
 ### Introduction
-This project is based on the paper ["Automatic Particle Detection in Clound Chambers" by Zachary Sussman](https://zacharysussman.com/pdf/cloud-chamber.pdf). The code detects and evaluates subatomic particle tracks in videos of a functioning [cloud chamber](https://en.wikipedia.org/wiki/Cloud_chamber) using the [OpenCV-Python](https://docs.opencv.org/4.x/d6/d00/tutorial_py_root.html) library.
+This project is based on the paper ["Automatic Particle Detection in Cloud Chambers" by Zachary Sussman](https://zacharysussman.com/pdf/cloud-chamber.pdf). The code detects and evaluates subatomic particle tracks in videos of a functioning [cloud chamber](https://en.wikipedia.org/wiki/Cloud_chamber) using the [OpenCV-Python](https://docs.opencv.org/4.x/d6/d00/tutorial_py_root.html) library.
 
 ### Improvements
 A few improvements have been made to the original code in the paper:
